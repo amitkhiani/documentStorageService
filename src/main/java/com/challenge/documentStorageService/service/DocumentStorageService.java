@@ -1,5 +1,6 @@
 package com.challenge.documentStorageService.service;
 
+import com.challenge.documentStorageService.exception.DocumentNotFoundException;
 import com.challenge.documentStorageService.model.Document;
 import com.challenge.documentStorageService.repository.DocumentStorageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +19,15 @@ public class DocumentStorageService {
     }
 
     public String saveDocumentDetails(final String documentContent) {
-        /*final Document document = documentStorageRepository.save(new Document().withDocumentContents(documentContent));
-        return document.getDocumentId();*/
         return documentStorageRepository.save(new Document().withDocumentContents(documentContent)).getDocumentId();
     }
 
     public String getDocumentDetails(final String docId) {
         final Optional<Document> document = documentStorageRepository.findById(docId);
-        return document.isPresent() ? document.get().getDocumentContents() : null;
-        //return documentStorageRepository.findById(docId);
+        if(!document.isPresent()) {
+            throw new DocumentNotFoundException("Document not found.");
+        }
+        return document.get().getDocumentContents();
     }
 
     public void updateStoredDocument(final String documentId, final String updatedDocumentContent) {

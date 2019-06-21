@@ -1,6 +1,6 @@
 package com.challenge.documentStorageService.controller;
 
-import com.challenge.documentStorageService.exception.DocumentIdNotFoundException;
+import com.challenge.documentStorageService.exception.DocumentNotFoundException;
 import com.challenge.documentStorageService.service.DocumentStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,25 +18,17 @@ public class DocumentStorage {
     }
 
     //Create - POST /storage/documents
-    @PostMapping(value = "/documents", produces = "text/plain")
+    @PostMapping(value = "/documents", produces = "text/plain;charset=us-ascii")
     @ResponseStatus(HttpStatus.CREATED)
     public String createDocumentForStorage(@RequestBody String documentContent) {
         return documentStorageService.saveDocumentDetails(documentContent);
     }
-    /*public CreateDocumentResponse createDocumentForStorage(@RequestBody String documentContent) {
-        return new CreateDocumentResponse().withDocumentId(documentStorageService.saveDocumentDetails(documentContent));
-    }*/
 
     //Query - GET /storage/documents/{docId}
-    @GetMapping(value = "/documents/{docId}", produces = "text/plain")
+    @GetMapping(value = "/documents/{docId}", produces = "text/plain;charset=us-ascii")
     @ResponseStatus(HttpStatus.OK)
     public String getDocument(@PathVariable String docId) {
-        // TODO: Change the null logic to service class.
-        final String documentContents = documentStorageService.getDocumentDetails(docId);
-        if (documentContents == null) {
-            throw new DocumentIdNotFoundException("Document Id not found.");
-        }
-        return documentContents;
+        return documentStorageService.getDocumentDetails(docId);
     }
 
     //Update - PUT /storage/documents/{docId}
@@ -44,11 +36,7 @@ public class DocumentStorage {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateStoredDocument(@PathVariable String docId, @RequestBody String updatedDocumentContent) {
         // Check for document exists or not.
-        // TODO: Change the null logic to service class.
-        final String documentContents = documentStorageService.getDocumentDetails(docId);
-        if (documentContents == null) {
-            throw new DocumentIdNotFoundException("Document Id not found.");
-        }
+        documentStorageService.getDocumentDetails(docId);
         // Update the document content.
         documentStorageService.updateStoredDocument(docId, updatedDocumentContent);
     }
@@ -58,18 +46,14 @@ public class DocumentStorage {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteStoredDocument(@PathVariable String docId) {
         // Check for document exists or not.
-        // TODO: Change the null logic to service class.
-        final String documentContents = documentStorageService.getDocumentDetails(docId);
-        if (documentContents == null) {
-            throw new DocumentIdNotFoundException("Document Id not found.");
-        }
+        documentStorageService.getDocumentDetails(docId);
         // Delete the document.
         documentStorageService.deleteStoredDocumentDetails(docId);
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(DocumentIdNotFoundException.class)
-    public void handleException (DocumentIdNotFoundException exception) {
+    @ExceptionHandler(DocumentNotFoundException.class)
+    public void handleException (DocumentNotFoundException exception) {
         // TODO: Write the logic.
     }
 }
