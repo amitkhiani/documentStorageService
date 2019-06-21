@@ -23,9 +23,17 @@ public class DocumentStorageService {
         return documentStorageRepository.save(new Document().withDocumentContents(documentContent)).getDocumentId();
     }
 
-    public String getDocumentDetails(String docId) {
+    public String getDocumentDetails(final String docId) {
         final Optional<Document> document = documentStorageRepository.findById(docId);
         return document.isPresent() ? document.get().getDocumentContents() : null;
         //return documentStorageRepository.findById(docId);
+    }
+
+    public void updateStoredDocument(final String documentId, final String updatedDocumentContent) {
+        documentStorageRepository.save(new Document().withDocumentId(documentId).withDocumentContents(updatedDocumentContent));
+    }
+
+    public void deleteStoredDocumentDetails(String docId) {
+        documentStorageRepository.deleteById(docId);
     }
 }

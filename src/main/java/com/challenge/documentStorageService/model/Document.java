@@ -41,6 +41,11 @@ public class Document {
         return documentContents;
     }
 
+    public Document withDocumentId(final String documentId) {
+        this.documentId = documentId;
+        return this;
+    }
+
     public Document withDocumentName(final String documentName) {
         this.documentName = documentName;
         return this;
