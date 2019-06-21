@@ -61,7 +61,6 @@ public class DocumentStorage {
         // TODO: Change the null logic to service class.
         final String documentContents = documentStorageService.getDocumentDetails(docId);
         if (documentContents == null) {
-            // TODO: Change to custom exception.
             throw new DocumentIdNotFoundException("Document Id not found.");
         }
         // Delete the document.
