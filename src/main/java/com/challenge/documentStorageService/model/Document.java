@@ -12,6 +12,7 @@ public class Document {
 
     @Id
     @Column(name = "id", columnDefinition = "VARCHAR(255)")
+    // TODO: Need to change it to 20 character unique id.
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
     private String documentId;
